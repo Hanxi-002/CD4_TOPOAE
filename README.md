@@ -1,3 +1,42 @@
+# Run CD4
+Go into src/datasets/CD4.py to change the path to access the w6_single.csv at data/CD4_Data/w6_single.csv. <br>
+run the examply by using 
+```bash
+python -m exp.train_model -F test_runs with experiments/train_model/best_runs/CD4/TopoRegEdgeSymmetric.json device='cuda'   
+```  
+
+Pickle files will be automatically created. <br>
+Current Error: 
+
+Traceback (most recent calls WITHOUT Sacred internals):
+  File "/ix/djishnu/Hanxi/CD4_TOPOAE/exp/train_model.py", line 142, in train
+    training_loop()
+  File "/ix/djishnu/Hanxi/CD4_TOPOAE/src/training.py", line 79, in __call__
+    if self.on_epoch_begin(remove_self(locals())):
+  File "/ix/djishnu/Hanxi/CD4_TOPOAE/src/training.py", line 42, in on_epoch_begin
+    return self._execute_callbacks('on_epoch_begin', local_variables)
+  File "/ix/djishnu/Hanxi/CD4_TOPOAE/src/training.py", line 37, in _execute_callbacks
+    stop |= bool(getattr(callback, hook)(**local_variables))
+  File "/ix/djishnu/Hanxi/CD4_TOPOAE/exp/callbacks.py", line 157, in on_epoch_begin
+    losses = self._compute_average_losses(model)
+  File "/ix/djishnu/Hanxi/CD4_TOPOAE/exp/callbacks.py", line 127, in _compute_average_losses
+    loss, loss_components = model(data)
+  File "/ihome/djishnu/xiaoh/mambaforge/envs/toyenv/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/ix/djishnu/Hanxi/CD4_TOPOAE/src/models/approx_based.py", line 48, in forward
+    latent = self.autoencoder.encode(x)
+  File "/ix/djishnu/Hanxi/CD4_TOPOAE/src/models/submodules.py", line 561, in encode
+    return self.encoder(x)
+  File "/ihome/djishnu/xiaoh/mambaforge/envs/toyenv/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/ihome/djishnu/xiaoh/mambaforge/envs/toyenv/lib/python3.10/site-packages/torch/nn/modules/container.py", line 217, in forward
+    input = module(input)
+  File "/ihome/djishnu/xiaoh/mambaforge/envs/toyenv/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/ihome/djishnu/xiaoh/mambaforge/envs/toyenv/lib/python3.10/site-packages/torch/nn/modules/linear.py", line 114, in forward
+    return F.linear(input, self.weight, self.bias)
+RuntimeError: mat1 and mat2 shapes cannot be multiplied (50x1847 and 101x32)
+
 # Topological Autoencoders
 
 <img src="animations/topoae.gif" width="400"> <img src="animations/vanilla.gif" width="400">
