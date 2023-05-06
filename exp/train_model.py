@@ -6,6 +6,7 @@ from sacred.utils import apply_backspaces_and_linefeeds
 import torch
 import numpy as np
 import pandas as pd
+import dill as pkl
 
 from src.callbacks import Callback, SaveReconstructedImages, \
     SaveLatentRepresentation, Progressbar
@@ -18,6 +19,9 @@ from src.visualization import plot_losses, visualize_latents
 from .callbacks import LogDatasetLoss, LogTrainingLoss
 from .ingredients import model as model_config
 from .ingredients import dataset as dataset_config
+
+from sacred import SETTINGS
+SETTINGS.CONFIG.READ_ONLY_CONFIG = False
 
 EXP = Experiment(
     'training',
@@ -90,9 +94,13 @@ def train(n_epochs, batch_size, learning_rate, weight_decay, val_size,
     # Get data, sacred does some magic here so we need to hush the linter
     # pylint: disable=E1120,E1123
     dataset = dataset_config.get_instance(train=True)
+    pkl.dump(dataset, open('dataset.pkl', 'wb'))
     train_dataset, validation_dataset = split_validation(
         dataset, val_size, _rnd)
     test_dataset = dataset_config.get_instance(train=False)
+    pkl.dump(test_dataset, open('test_dataset.pkl', 'wb'))
+    pkl.dump(train_dataset, open('train_dataset.pkl', 'wb'))
+    pkl.dump(validation_dataset, open('validation_dataset.pkl', 'wb'))
 
     # Get model, sacred does some magic here so we need to hush the linter
     # pylint: disable=E1120
